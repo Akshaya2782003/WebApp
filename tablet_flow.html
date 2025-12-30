@@ -3,9 +3,2106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>KYC Flow Demo - Hackathon Pitch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .slides-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            padding: 60px 80px;
+            background: linear-gradient(135deg, #1a0033 0%, #000 100%);
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(220, 38, 127, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(220, 38, 127, 0.8); }
+        }
+
+        h1 {
+            font-size: 5em;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        h2 {
+            font-size: 4em;
+            margin-bottom: 40px;
+            color: #4c45f0;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 2em;
+            color: #888;
+            animation: slideInUp 1s ease-out;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+            margin-top: 60px;
+            width: 90%;
+        }
+
+        .icon-box {
+            text-align: center;
+            padding: 40px;
+            background: rgba(76, 69, 240, 0.1);
+            border-radius: 20px;
+            border: 2px solid rgba(76, 69, 240, 0.3);
+            animation: slideInUp 0.8s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .icon-box:nth-child(1) { animation-delay: 0.2s; }
+        .icon-box:nth-child(2) { animation-delay: 0.4s; }
+        .icon-box:nth-child(3) { animation-delay: 0.6s; }
+        .icon-box:nth-child(4) { animation-delay: 0.8s; }
+
+        .icon-box:hover {
+            transform: translateY(-10px);
+            border-color: #4c45f0;
+            background: rgba(76, 69, 240, 0.2);
+        }
+
+        .icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .icon-box:nth-child(2) .icon { animation-delay: 0.5s; }
+        .icon-box:nth-child(3) .icon { animation-delay: 1s; }
+        .icon-box:nth-child(4) .icon { animation-delay: 1.5s; }
+
+        .icon-label {
+            font-size: 1.8em;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .flow-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 80px;
+            width: 90%;
+        }
+
+        .flow-step {
+            background: rgba(76, 69, 240, 0.15);
+            padding: 50px 40px;
+            border-radius: 20px;
+            border: 3px solid #4c45f0;
+            text-align: center;
+            min-width: 250px;
+            animation: slideInUp 0.8s ease-out;
+            position: relative;
+        }
+
+        .flow-step:nth-child(1) { animation-delay: 0.2s; }
+        .flow-step:nth-child(3) { animation-delay: 0.4s; }
+        .flow-step:nth-child(5) { animation-delay: 0.6s; }
+        .flow-step:nth-child(7) { animation-delay: 0.8s; }
+
+        .flow-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .flow-step:nth-child(3) .flow-icon { animation-delay: 0.5s; }
+        .flow-step:nth-child(5) .flow-icon { animation-delay: 1s; }
+        .flow-step:nth-child(7) .flow-icon { animation-delay: 1.5s; }
+
+        .flow-text {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .arrow {
+            font-size: 4em;
+            color: #4c45f0;
+            animation: slideInRight 1s ease-out;
+        }
+
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 80px;
+            max-width: 1400px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(76, 69, 240, 0.2) 0%, rgba(76, 69, 240, 0.05) 100%);
+            padding: 60px 50px;
+            border-radius: 25px;
+            border: 3px solid #4c45f0;
+            text-align: center;
+            width: 320px;
+            animation: slideInUp 0.8s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(76, 69, 240, 0.5);
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.2s; }
+        .stat-card:nth-child(2) { animation-delay: 0.4s; }
+        .stat-card:nth-child(3) { animation-delay: 0.6s; }
+        .stat-card:nth-child(4) { animation-delay: 0.8s; margin-left: 180px; }
+        .stat-card:nth-child(5) { animation-delay: 1s; }
+
+        .stat-number {
+            font-size: 5em;
+            color: #4c45f0;
+            font-weight: bold;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .stat-label {
+            font-size: 1.6em;
+            color: #ccc;
+            margin-top: 15px;
+        }
+
+        .big-emoji {
+            font-size: 15em;
+            animation: float 4s ease-in-out infinite;
+            margin: 40px 0;
+        }
+
+        .logo {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            font-size: 3em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hyperverge-logo-large {
+            font-size: 6em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 40px;
+            animation: slideInUp 0.8s ease-out;
+            letter-spacing: 2px;
+        }
+
+        .hyperverge-logo-image {
+            max-width: 500px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 40px;
+            animation: slideInUp 0.8s ease-out;
+            filter: drop-shadow(0 8px 30px rgba(76, 69, 240, 0.6));
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        button {
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.2em;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 69, 240, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(76, 69, 240, 0.6);
+        }
+
+        button:disabled {
+            background: #333;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            font-size: 1.5em;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(76, 69, 240, 0.3) 0%, rgba(76, 69, 240, 0.1) 100%);
+            padding: 40px 60px;
+            border-radius: 20px;
+            border: 2px solid #4c45f0;
+            margin-top: 60px;
+            font-size: 2em;
+            text-align: center;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+            width: 90%;
+        }
+
+        .tech-card {
+            background: rgba(76, 69, 240, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(76, 69, 240, 0.3);
+            text-align: center;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .tech-card:nth-child(1) { animation-delay: 0.2s; }
+        .tech-card:nth-child(2) { animation-delay: 0.4s; }
+        .tech-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .tech-emoji {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .tech-name {
+            font-size: 1.6em;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 60px;
+            width: 70%;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 30px;
+            background: rgba(76, 69, 240, 0.1);
+            border-radius: 15px;
+            border-left: 5px solid #4c45f0;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.6s; }
+
+        .timeline-week {
+            font-size: 2em;
+            color: #4c45f0;
+            font-weight: bold;
+            min-width: 150px;
+        }
+
+        .timeline-text {
+            font-size: 1.6em;
+            color: #ccc;
+        }
+
+        /* Zepto Demo Styles */
+        .demo-section {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .input-form {
+            background: rgba(76, 69, 240, 0.1);
+            padding: 80px 100px;
+            border-radius: 30px;
+            border: 3px solid rgba(76, 69, 240, 0.5);
+            min-width: 800px;
+            box-shadow: 0 10px 40px rgba(76, 69, 240, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 50px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.8em;
+            color: #aaa;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+
+        .typed-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 3px solid #4c45f0;
+            border-radius: 15px;
+            padding: 35px 40px;
+            font-size: 3em;
+            color: #fff;
+            min-height: 110px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(76, 69, 240, 0.3);
+        }
+
+        .typed-input::after {
+            content: '|';
+            animation: blink 1s infinite;
+            margin-left: 8px;
+            font-size: 1.1em;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .generate-btn {
+            width: 100%;
+            margin-top: 30px;
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            transition: all 0.3s ease;
+            font-size: 1.8em;
+            padding: 25px 50px;
+            font-weight: 700;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(76, 69, 240, 0.5);
+        }
+
+        .flow-preview {
+            background: linear-gradient(135deg, rgba(76, 69, 240, 0.2) 0%, rgba(76, 69, 240, 0.05) 100%);
+            padding: 50px 60px;
+            border-radius: 25px;
+            border: 3px solid #4c45f0;
+            min-width: 700px;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .flow-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .flow-header h3 {
+            font-size: 2.5em;
+            color: #fff;
+            margin: 0;
+        }
+
+        .view-btn {
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            padding: 18px 40px;
+            font-size: 1.3em;
+            white-space: nowrap;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Branding Fetch Animation */
+        .branding-fetch {
+            text-align: center;
+        }
+
+        .branding-cards {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .branding-card {
+            background: rgba(76, 69, 240, 0.1);
+            padding: 40px;
+            border-radius: 25px;
+            border: 3px solid #4c45f0;
+            min-width: 250px;
+            transition: all 0.5s ease;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .branding-card.loaded {
+            background: rgba(76, 255, 150, 0.1);
+            border-color: #4bff96;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .card-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .card-label {
+            font-size: 1.5em;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .card-status {
+            font-size: 1.2em;
+            color: #aaa;
+            transition: all 0.3s ease;
+        }
+
+        .branding-card.loaded .card-status {
+            color: #4bff96;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .kyc-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .kyc-step {
+            background: rgba(76, 69, 240, 0.15);
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: 2px solid #4c45f0;
+            text-align: center;
+            position: relative;
+            animation: slideInUp 0.6s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .kyc-step:hover {
+            transform: translateY(-10px);
+            border-color: #7c77ff;
+            background: rgba(76, 69, 240, 0.25);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(76, 69, 240, 0.5);
+        }
+
+        .step-icon {
+            font-size: 4em;
+            margin: 20px 0 15px 0;
+        }
+
+        .step-name {
+            font-size: 1.4em;
+            color: #fff;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        @keyframes typeWriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes fadeInBtn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Flow Execution Styles */
+        .execution-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            gap: 40px;
+        }
+
+        .user-side, .backend-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-side {
+            flex: 0.8;
+            display: flex;
+            align-items: center;
+        }
+
+        .phone-mockup {
+            width: 280px;
+            height: 560px;
+            background: #1a1a1a;
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 8px solid #333;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0033 0%, #000 100%);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .screen-content {
+            text-align: center;
+            padding: 30px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .screen-icon {
+            font-size: 6em;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .screen-text {
+            font-size: 1.8em;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .user-animation-box {
+            background: rgba(76, 69, 240, 0.15);
+            padding: 40px 35px;
+            border-radius: 25px;
+            border: 3px solid #4c45f0;
+            min-width: 320px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .animated-user {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-avatar {
+            font-size: 8em;
+            animation: float 3s ease-in-out infinite;
+            transition: all 0.5s ease;
+        }
+
+        .user-action {
+            font-size: 1.6em;
+            color: #4c45f0;
+            font-weight: 600;
+            text-align: center;
+            min-height: 50px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .action-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            min-height: 120px;
+            justify-content: center;
+        }
+
+        .visual-element {
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        .id-card {
+            width: 180px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(76, 69, 240, 0.3) 0%, rgba(76, 69, 240, 0.1) 100%);
+            border-radius: 12px;
+            border: 2px solid #4c45f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        .scanning-lines {
+            position: absolute;
+            width: 180px;
+            height: 3px;
+            background: #4c45f0;
+            animation: scan 2s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0%, 100% { transform: translateY(-60px); opacity: 0; }
+            50% { transform: translateY(60px); opacity: 1; }
+        }
+
+        .checkmark-animation {
+            font-size: 5em;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .camera-flash {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(76, 69, 240, 0.8) 0%, transparent 70%);
+            animation: flash 1s ease-out;
+        }
+
+        @keyframes flash {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .searching-animation {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-radar {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #4c45f0;
+            animation: radarPulse 2s ease-out infinite;
+        }
+
+        .search-radar::before,
+        .search-radar::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 3px solid #4c45f0;
+        }
+
+        .search-radar::before {
+            width: 100px;
+            height: 100px;
+            animation: radarPulse 2s ease-out 0.3s infinite;
+        }
+
+        .search-radar::after {
+            width: 50px;
+            height: 50px;
+            animation: radarPulse 2s ease-out 0.6s infinite;
+        }
+
+        @keyframes radarPulse {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        .search-icon {
+            font-size: 4em;
+            z-index: 2;
+            animation: spin 4s linear infinite;
+        }
+
+        .side-label {
+            font-size: 1.6em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .progress-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            align-items: center;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #333;
+            border: 3px solid #666;
+            transition: all 0.3s ease;
+        }
+
+        .progress-item.active .progress-dot {
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            border-color: #4c45f0;
+            box-shadow: 0 0 20px rgba(76, 69, 240, 0.6);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .progress-item.completed .progress-dot {
+            background: #4c45f0;
+            border-color: #4c45f0;
+        }
+
+        .progress-item.completed .progress-dot::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .progress-label {
+            font-size: 1.4em;
+            color: #666;
+            font-weight: 600;
+            min-width: 100px;
+            transition: color 0.3s ease;
+        }
+
+        .progress-item.active .progress-label {
+            color: #4c45f0;
+        }
+
+        .progress-item.completed .progress-label {
+            color: #7c77ff;
+        }
+
+        .progress-line {
+            width: 4px;
+            height: 30px;
+            background: #333;
+            margin: 0 0 0 13px;
+            transition: background 0.3s ease;
+        }
+
+        .progress-line.completed {
+            background: #4c45f0;
+        }
+
+        .replay-btn {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.4em;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 69, 240, 0.4);
+            z-index: 100;
+        }
+
+        .replay-btn:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 6px 25px rgba(76, 69, 240, 0.6);
+        }
+
+        /* Horizontal Journey Slide */
+        #current-process-slide,
+        #proposed-process-slide {
+            position: relative;
+        }
+
+        #current-process-slide h2,
+        #proposed-process-slide h2 {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        #current-process-slide .status-badge-anim,
+        #proposed-process-slide .status-badge-anim {
+            position: absolute;
+            top: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .status-badge-anim {
+            display: inline-block;
+            padding: 18px 50px;
+            border-radius: 35px;
+            font-size: 1.4em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: fadeIn 0.8s ease-out;
+            margin-bottom: 0;
+        }
+
+        .status-badge-anim.red {
+            background: rgba(255, 75, 75, 0.2);
+            border: 3px solid #ff4b4b;
+            color: #ff6b6b;
+        }
+
+        .status-badge-anim.green {
+            background: rgba(75, 255, 150, 0.2);
+            border: 3px solid #4bff96;
+            color: #5fff9f;
+        }
+
+        .horizontal-journey {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 340px 60px 60px 60px;
+        }
+
+        .journey-step-horizontal {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            opacity: 0.3;
+            transition: all 0.5s ease;
+            transform: scale(0.9);
+        }
+
+        .journey-step-horizontal.active {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .step-node-horizontal {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 4px solid #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+
+        .step-node-horizontal.highlight-red {
+            background: rgba(255, 75, 75, 0.15);
+            border: 4px solid #ff4b4b;
+            box-shadow: 0 0 40px rgba(255, 75, 75, 0.6);
+        }
+
+        .step-node-horizontal.highlight-green {
+            background: rgba(75, 255, 150, 0.15);
+            border: 4px solid #4bff96;
+            box-shadow: 0 0 40px rgba(75, 255, 150, 0.6);
+        }
+
+        .journey-step-horizontal.active .step-node-horizontal {
+            border-color: #4c45f0;
+            box-shadow: 0 0 60px rgba(76, 69, 240, 0.9);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .node-icon {
+            font-size: 4.5em;
+        }
+
+        .step-label-horizontal {
+            font-size: 1.3em;
+            color: #aaa;
+            font-weight: 600;
+            text-align: center;
+            max-width: 180px;
+            transition: all 0.5s ease;
+            line-height: 1.4;
+        }
+
+        .journey-step-horizontal.active .step-label-horizontal {
+            color: #fff;
+            font-size: 1.6em;
+        }
+
+        .journey-arrow {
+            font-size: 4em;
+            color: #666;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .animated-person-horizontal {
+            position: absolute;
+            top: -20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+        }
+
+        .person-avatar {
+            font-size: 5.5em;
+            filter: drop-shadow(0 8px 25px rgba(76, 69, 240, 0.8));
+            animation: floatPerson 3s ease-in-out infinite;
+        }
+
+        @keyframes floatPerson {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .person-thought {
+            background: rgba(76, 69, 240, 0.9);
+            padding: 18px 30px;
+            border-radius: 25px;
+            font-size: 1.4em;
+            color: #fff;
+            white-space: nowrap;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 6px 20px rgba(76, 69, 240, 0.6);
+            font-weight: 600;
+        }
+
+        /* Trade-offs Slide */
+        .tradeoffs-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 50px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .tradeoffs-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .tradeoffs-column.advantages {
+            animation-delay: 0.1s;
+        }
+
+        .tradeoffs-column.disadvantages {
+            animation-delay: 0.2s;
+        }
+
+        .column-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .column-header h3 {
+            font-size: 2.5em;
+            margin: 0;
+            background: linear-gradient(135deg, #4c45f0 0%, #7c77ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tradeoff-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tradeoff-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px 30px;
+            border-radius: 18px;
+            border: 2px solid #444;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .tradeoff-item:nth-child(1) { animation-delay: 0.2s; }
+        .tradeoff-item:nth-child(2) { animation-delay: 0.3s; }
+        .tradeoff-item:nth-child(3) { animation-delay: 0.4s; }
+        .tradeoff-item:nth-child(4) { animation-delay: 0.5s; }
+        .tradeoff-item:nth-child(5) { animation-delay: 0.6s; }
+
+        .tradeoff-item:hover {
+            transform: translateX(10px);
+            border-color: #4c45f0;
+            background: rgba(76, 69, 240, 0.1);
+        }
+
+        .advantages .tradeoff-item:hover {
+            border-color: #4bff96;
+            background: rgba(75, 255, 150, 0.1);
+        }
+
+        .disadvantages .tradeoff-item:hover {
+            border-color: #ff9f4b;
+            background: rgba(255, 159, 75, 0.1);
+        }
+
+        .item-icon {
+            font-size: 2.5em;
+            flex-shrink: 0;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .item-desc {
+            font-size: 1.1em;
+            color: #aaa;
+            line-height: 1.4;
+        }
+
+        .vertical-divider {
+            width: 3px;
+            background: linear-gradient(to bottom, transparent, #4c45f0, transparent);
+            animation: glow 3s ease-in-out infinite;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello</h1>
+    <div class="logo">HyperVerge</div>
+
+    <div class="slides-container">
+        <!-- Slide 1: Title (HyperOnboard) -->
+        <div class="slide active">
+            <div class="big-emoji">🚀</div>
+            <h1>HyperOnboard</h1>
+            <p class="subtitle">Try Before You Buy</p>
+        </div>
+
+        <!-- Slide 2: Current Process -->
+        <div class="slide" id="current-process-slide">
+            <h2>Current Process</h2>
+            <div class="status-badge-anim red">How It Works Today</div>
+
+            <div class="horizontal-journey">
+                <div class="journey-step-horizontal" id="step-current-1">
+                    <div class="step-node-horizontal">
+                        <div class="node-icon">🌐</div>
+                    </div>
+                    <div class="step-label-horizontal">Visit Website</div>
+                </div>
+
+                <div class="journey-arrow">→</div>
+
+                <div class="journey-step-horizontal" id="step-current-2">
+                    <div class="step-node-horizontal highlight-red">
+                        <div class="node-icon">❌</div>
+                    </div>
+                    <div class="step-label-horizontal">Can't Test the Flow</div>
+                </div>
+
+                <div class="journey-arrow">→</div>
+
+                <div class="journey-step-horizontal" id="step-current-3">
+                    <div class="step-node-horizontal">
+                        <div class="node-icon">📧</div>
+                    </div>
+                    <div class="step-label-horizontal">Request Demo</div>
+                </div>
+
+                <div class="journey-arrow">→</div>
+
+                <div class="journey-step-horizontal" id="step-current-4">
+                    <div class="step-node-horizontal highlight-red">
+                        <div class="node-icon">⏰</div>
+                    </div>
+                    <div class="step-label-horizontal">Waiting for Sales</div>
+                </div>
+
+                <div class="journey-arrow">→</div>
+
+                <div class="journey-step-horizontal" id="step-current-5">
+                    <div class="step-node-horizontal highlight-red">
+                        <div class="node-icon">💸</div>
+                    </div>
+                    <div class="step-label-horizontal">Lost Interest</div>
+                </div>
+
+                <!-- Animated Person -->
+                <div class="animated-person-horizontal" id="person-current">
+                    <div class="person-avatar">👤</div>
+                    <div class="person-thought" id="thought-current"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Proposed Process -->
+        <div class="slide" id="proposed-process-slide">
+            <h2>Proposed Process</h2>
+            <div class="status-badge-anim green">With Our Solution</div>
+
+            <div class="horizontal-journey">
+                <div class="journey-step-horizontal" id="step-solution-1">
+                    <div class="step-node-horizontal">
+                        <div class="node-icon">🌐</div>
+                    </div>
+                    <div class="step-label-horizontal">Visit Website</div>
+                </div>
+
+                <div class="journey-arrow">→</div>
+
+                <div class="journey-step-horizontal" id="step-solution-2">
+                    <div class="step-node-horizontal highlight-green">
+                        <div class="node-icon">✍️</div>
+                    </div>
+                    <div class="step-label-horizontal">Enter Company & Use Case</div>
+                </div>
+
+                <div class="journey-arrow">→</div>
+
+                <div class="journey-step-horizontal" id="step-solution-3">
+                    <div class="step-node-horizontal highlight-green">
+                        <div class="node-icon">🤖</div>
+                    </div>
+                    <div class="step-label-horizontal">AI Generates Flow</div>
+                </div>
+
+                <div class="journey-arrow">→</div>
+
+                <div class="journey-step-horizontal" id="step-solution-4">
+                    <div class="step-node-horizontal highlight-green">
+                        <div class="node-icon">⚡</div>
+                    </div>
+                    <div class="step-label-horizontal">Test Instantly</div>
+                </div>
+
+                <div class="journey-arrow">→</div>
+
+                <div class="journey-step-horizontal" id="step-solution-5">
+                    <div class="step-node-horizontal highlight-green">
+                        <div class="node-icon">✅</div>
+                    </div>
+                    <div class="step-label-horizontal">Understand Capability</div>
+                </div>
+
+                <!-- Animated Person -->
+                <div class="animated-person-horizontal" id="person-solution">
+                    <div class="person-avatar">👤</div>
+                    <div class="person-thought" id="thought-solution"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: The Solution -->
+        <div class="slide">
+            <h2>The Solution</h2>
+            <div class="flow-container">
+                <div class="flow-step">
+                    <div class="flow-icon">🏢</div>
+                    <div class="flow-text">Company Name</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon">🎯</div>
+                    <div class="flow-text">Use Case</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon">⚡</div>
+                    <div class="flow-text">Live Demo</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon">🎉</div>
+                    <div class="flow-text">New Revenue to HyperVerge</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Potential Target Segments -->
+        <div class="slide">
+            <h2>Potential Target Segments</h2>
+            <div class="icon-grid">
+                <div class="icon-box">
+                    <div class="icon">🚚</div>
+                    <div class="icon-label">Gig Economy</div>
+                </div>
+                <div class="icon-box">
+                    <div class="icon">🏦</div>
+                    <div class="icon-label">Banking</div>
+                </div>
+                <div class="icon-box">
+                    <div class="icon">🏢</div>
+                    <div class="icon-label">NBFC</div>
+                </div>
+                <div class="icon-box">
+                    <div class="icon">🛡️</div>
+                    <div class="icon-label">Insurance</div>
+                </div>
+                <div class="icon-box">
+                    <div class="icon">📈</div>
+                    <div class="icon-label">Securities & Brokerage</div>
+                </div>
+                <div class="icon-box">
+                    <div class="icon">₿</div>
+                    <div class="icon-label">Crypto</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Example (Zepto Demo) -->
+        <div class="slide" id="zepto-slide">
+            <!-- Step 1: Input Form -->
+            <div class="demo-section" id="input-section">
+                <div class="input-form">
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <div class="typed-input" id="company-input"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Use Case</label>
+                        <div class="typed-input" id="usecase-input"></div>
+                    </div>
+                    <button class="generate-btn" id="generate-btn" style="opacity: 0;">Generate Flow</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Fetching Branding -->
+            <div class="demo-section" id="branding-section" style="display: none;">
+                <div class="branding-fetch">
+                    <h3 style="color: #4c45f0; margin-bottom: 50px; font-size: 3.5em;">🔍 Fetching Company Details...</h3>
+                    <div class="branding-cards">
+                        <div class="branding-card" id="logo-card">
+                            <div class="card-icon">🎨</div>
+                            <div class="card-label">Logo & Branding</div>
+                            <div class="card-status">Loading...</div>
+                        </div>
+                        <div class="branding-card" id="details-card">
+                            <div class="card-icon">🏢</div>
+                            <div class="card-label">Company Info</div>
+                            <div class="card-status">Loading...</div>
+                        </div>
+                        <div class="branding-card" id="website-card">
+                            <div class="card-icon">🌐</div>
+                            <div class="card-label">Website Data</div>
+                            <div class="card-status">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Generated Flow -->
+            <div class="demo-section" id="flow-section" style="display: none;">
+                <div class="flow-preview">
+                    <div class="flow-header">
+                        <h3>🎯 Generated KYC Flow for Zepto</h3>
+                        <button class="view-btn" id="view-btn">Open Flow →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Detailed Flow Steps -->
+            <div class="demo-section" id="steps-section" style="display: none;">
+                <div class="kyc-steps-grid">
+                    <div class="kyc-step" style="animation-delay: 0.1s;">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">🔍</div>
+                        <div class="step-name">Dedupe Check</div>
+                    </div>
+                    <div class="kyc-step" style="animation-delay: 0.2s;">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">🤳</div>
+                        <div class="step-name">Selfie + Liveness</div>
+                    </div>
+                    <div class="kyc-step" style="animation-delay: 0.3s;">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">📄</div>
+                        <div class="step-name">Document + OCR</div>
+                    </div>
+                    <div class="kyc-step" style="animation-delay: 0.4s;">
+                        <div class="step-number">4</div>
+                        <div class="step-icon">💾</div>
+                        <div class="step-name">DB Checks</div>
+                    </div>
+                    <div class="kyc-step" style="animation-delay: 0.5s;">
+                        <div class="step-number">5</div>
+                        <div class="step-icon">🎂</div>
+                        <div class="step-name">Age Verification</div>
+                    </div>
+                    <div class="kyc-step" style="animation-delay: 0.6s;">
+                        <div class="step-number">6</div>
+                        <div class="step-icon">👤</div>
+                        <div class="step-name">Face Match</div>
+                    </div>
+                    <div class="kyc-step" style="animation-delay: 0.7s;">
+                        <div class="step-number">7</div>
+                        <div class="step-icon">✅</div>
+                        <div class="step-name">Enrol to DB</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: User Experience -->
+        <div class="slide" id="flow-execution-slide">
+            <h2 style="margin-bottom: 60px;">User Experience</h2>
+
+            <div class="execution-container">
+                <!-- User Side -->
+                <div class="user-side">
+                    <div class="phone-mockup">
+                        <div class="phone-screen" id="phone-screen">
+                            <div class="screen-content" id="screen-content">
+                                <div class="screen-icon">📱</div>
+                                <div class="screen-text">Starting KYC...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="side-label">User Journey</div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-side">
+                    <div class="progress-steps" id="progress-steps">
+                        <div class="progress-item" data-step="1">
+                            <div class="progress-dot"></div>
+                            <div class="progress-label">Dedupe</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-item" data-step="2">
+                            <div class="progress-dot"></div>
+                            <div class="progress-label">Selfie</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-item" data-step="3">
+                            <div class="progress-dot"></div>
+                            <div class="progress-label">Document</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-item" data-step="4">
+                            <div class="progress-dot"></div>
+                            <div class="progress-label">DB Check</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-item" data-step="5">
+                            <div class="progress-dot"></div>
+                            <div class="progress-label">Age</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-item" data-step="6">
+                            <div class="progress-dot"></div>
+                            <div class="progress-label">Face Match</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-item" data-step="7">
+                            <div class="progress-dot"></div>
+                            <div class="progress-label">Enrol</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backend Side -->
+                <div class="backend-side">
+                    <div class="side-label">User Actions</div>
+                    <div class="user-animation-box">
+                        <div class="animated-user">
+                            <div class="user-avatar">👤</div>
+                            <div class="user-action" id="user-action">Getting ready...</div>
+                        </div>
+                        <div class="action-visual" id="action-visual"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Replay Button -->
+            <button class="replay-btn" id="replay-btn" style="display: none;" onclick="replayFlowAnimation()">
+                🔄 Replay Animation
+            </button>
+        </div>
+
+        <!-- Slide 8: Lead Evaluation Features -->
+        <div class="slide">
+            <h2>Lead Evaluation Features</h2>
+            <p style="font-size: 1.8em; color: #aaa; margin-bottom: 40px; text-align: center;">
+                Collect comprehensive data to evaluate and qualify leads effectively 📊
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; align-items: flex-start; max-width: 1200px;">
+                <div class="icon-box" style="animation-delay: 0.2s; width: 280px; min-height: 220px;">
+                    <div class="icon">👤</div>
+                    <div class="icon-label">User Role</div>
+                </div>
+                <div class="icon-box" style="animation-delay: 0.4s; width: 280px; min-height: 220px;">
+                    <div class="icon">🏢</div>
+                    <div class="icon-label">Company Details</div>
+                </div>
+                <div class="icon-box" style="animation-delay: 0.6s; width: 280px; min-height: 220px;">
+                    <div class="icon">📞</div>
+                    <div class="icon-label">Contact Information</div>
+                </div>
+                <div class="icon-box" style="animation-delay: 0.8s; margin-left: 180px; width: 280px; min-height: 220px;">
+                    <div class="icon">🎯</div>
+                    <div class="icon-label">Expectations</div>
+                </div>
+                <div class="icon-box" style="animation-delay: 1s; width: 280px; min-height: 220px;">
+                    <div class="icon">💬</div>
+                    <div class="icon-label">Feedback</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Impact -->
+        <div class="slide">
+            <h2>Impact</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">3x</div>
+                    <div class="stat-label">Faster Leads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">40%</div>
+                    <div class="stat-label">Shorter Cycle</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Always On</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2x</div>
+                    <div class="stat-label">High Conversion Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Personalized Experience</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Market Opportunity -->
+        <div class="slide">
+            <h2>Market Opportunity</h2>
+            <p style="font-size: 1.8em; color: #aaa; margin-bottom: 60px; text-align: center;">
+                Massive untapped potential in the KYC and onboarding space 🌍
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 50px; max-width: 1000px; align-items: center;">
+                <div style="display: flex; gap: 60px; justify-content: center; width: 100%;">
+                    <div class="stat-card" style="animation-delay: 0.2s; width: 380px;">
+                        <div class="stat-number" style="font-size: 4.5em;">30 days</div>
+                        <div class="stat-label" style="font-size: 1.8em;">Average Sales Cycle</div>
+                        <div style="font-size: 2em; color: #4bff96; margin-top: 20px; font-weight: 700;">Our solution: &lt;1 hr to trial</div>
+                    </div>
+                    <div class="stat-card" style="animation-delay: 0.4s; width: 380px;">
+                        <div class="stat-number" style="font-size: 4.5em;">8-12%</div>
+                        <div class="stat-label" style="font-size: 1.8em;">Lead-to-Client Conversion</div>
+                        <div style="font-size: 2em; color: #4bff96; margin-top: 20px; font-weight: 700;">We can double this</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Closing -->
+        <div class="slide">
+            <div class="big-emoji">🎯</div>
+            <h1 style="font-size: 4em;">Let Them Try It</h1>
+            <p class="subtitle" style="font-size: 2.5em;">Before They Buy It</p>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">11</span>
+    </div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="prevSlide()">←</button>
+        <button id="next-btn" onclick="nextSlide()">→</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        document.getElementById('prev-btn').disabled = true;
+
+        // Current Process Animation
+        let currentProcessStarted = false;
+
+        function startCurrentProcessAnimation() {
+            if (currentProcessStarted) return;
+            currentProcessStarted = true;
+
+            const currentThoughts = [
+                "Let me check this out",
+                "Hmm, no demo option?",
+                "I'll request a demo then",
+                "Still waiting...",
+                "I'll try another vendor"
+            ];
+
+            let currentStep = 0;
+            const animateCurrentProcess = () => {
+                if (currentStep < 5) {
+                    // Remove previous active
+                    document.querySelectorAll('#current-process-slide .journey-step-horizontal').forEach(s => s.classList.remove('active'));
+
+                    // Activate current step
+                    const step = document.getElementById(`step-current-${currentStep + 1}`);
+                    step.classList.add('active');
+
+                    // Update thought bubble
+                    const thought = document.getElementById('thought-current');
+                    thought.textContent = currentThoughts[currentStep];
+
+                    // Move person horizontally
+                    const person = document.getElementById('person-current');
+                    const stepRect = step.getBoundingClientRect();
+                    const containerRect = step.parentElement.getBoundingClientRect();
+                    person.style.left = `${stepRect.left - containerRect.left + (stepRect.width / 2)}px`;
+
+                    currentStep++;
+                    setTimeout(animateCurrentProcess, 1800);
+                }
+            };
+
+            setTimeout(animateCurrentProcess, 500);
+        }
+
+        // Proposed Process Animation
+        let proposedProcessStarted = false;
+
+        function startProposedProcessAnimation() {
+            if (proposedProcessStarted) return;
+            proposedProcessStarted = true;
+
+            const solutionThoughts = [
+                "Let me check this out",
+                "Great, I can test right away!",
+                "Wow, custom flow generated!",
+                "Testing it now...",
+                "Perfect! This is exactly what I need!"
+            ];
+
+            let solutionStep = 0;
+            const animateProposedProcess = () => {
+                if (solutionStep < 5) {
+                    // Remove previous active
+                    document.querySelectorAll('#proposed-process-slide .journey-step-horizontal').forEach(s => s.classList.remove('active'));
+
+                    // Activate current step
+                    const step = document.getElementById(`step-solution-${solutionStep + 1}`);
+                    step.classList.add('active');
+
+                    // Update thought bubble
+                    const thought = document.getElementById('thought-solution');
+                    thought.textContent = solutionThoughts[solutionStep];
+
+                    // Move person horizontally
+                    const person = document.getElementById('person-solution');
+                    const stepRect = step.getBoundingClientRect();
+                    const containerRect = step.parentElement.getBoundingClientRect();
+                    person.style.left = `${stepRect.left - containerRect.left + (stepRect.width / 2)}px`;
+
+                    solutionStep++;
+                    setTimeout(animateProposedProcess, 1600);
+                }
+            };
+
+            setTimeout(animateProposedProcess, 500);
+        }
+
+        // Zepto Demo Animation
+        let demoAnimationStarted = false;
+
+        function typeText(element, text, speed = 100) {
+            return new Promise((resolve) => {
+                let i = 0;
+                element.textContent = '';
+                const timer = setInterval(() => {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(timer);
+                        resolve();
+                    }
+                }, speed);
+            });
+        }
+
+        function startZeptoDemo() {
+            if (demoAnimationStarted) return;
+            demoAnimationStarted = true;
+
+            const companyInput = document.getElementById('company-input');
+            const usecaseInput = document.getElementById('usecase-input');
+            const generateBtn = document.getElementById('generate-btn');
+            const inputSection = document.getElementById('input-section');
+            const brandingSection = document.getElementById('branding-section');
+            const flowSection = document.getElementById('flow-section');
+            const stepsSection = document.getElementById('steps-section');
+
+            // Reset sections
+            inputSection.style.display = 'flex';
+            brandingSection.style.display = 'none';
+            flowSection.style.display = 'none';
+            stepsSection.style.display = 'none';
+            companyInput.textContent = '';
+            usecaseInput.textContent = '';
+            generateBtn.style.opacity = '0';
+
+            // Reset branding cards
+            const logoCard = document.getElementById('logo-card');
+            const detailsCard = document.getElementById('details-card');
+            const websiteCard = document.getElementById('website-card');
+
+            logoCard.classList.remove('loaded');
+            detailsCard.classList.remove('loaded');
+            websiteCard.classList.remove('loaded');
+            logoCard.querySelector('.card-status').textContent = 'Loading...';
+            detailsCard.querySelector('.card-status').textContent = 'Loading...';
+            websiteCard.querySelector('.card-status').textContent = 'Loading...';
+
+            // Sequence of animations - Type company name first
+            setTimeout(() => {
+                typeText(companyInput, 'Zepto', 120).then(() => {
+                    // Wait a bit after company name is complete, then type use case
+                    setTimeout(() => {
+                        typeText(usecaseInput, 'Onboarding Riders', 120).then(() => {
+                            // Wait after use case is complete, then show generate button
+                            setTimeout(() => {
+                                generateBtn.style.opacity = '1';
+                                generateBtn.style.animation = 'fadeInBtn 0.5s ease-out';
+
+                                setTimeout(() => {
+                                    // Hide input, show branding fetch
+                                    inputSection.style.display = 'none';
+                                    brandingSection.style.display = 'flex';
+
+                                    // Animate branding cards loading
+                                    const logoCard = document.getElementById('logo-card');
+                                    const detailsCard = document.getElementById('details-card');
+                                    const websiteCard = document.getElementById('website-card');
+
+                                    setTimeout(() => {
+                                        logoCard.classList.add('loaded');
+                                        logoCard.querySelector('.card-status').textContent = '✓ Loaded';
+                                    }, 800);
+
+                                    setTimeout(() => {
+                                        detailsCard.classList.add('loaded');
+                                        detailsCard.querySelector('.card-status').textContent = '✓ Loaded';
+                                    }, 1400);
+
+                                    setTimeout(() => {
+                                        websiteCard.classList.add('loaded');
+                                        websiteCard.querySelector('.card-status').textContent = '✓ Loaded';
+                                    }, 2000);
+
+                                    setTimeout(() => {
+                                        // Hide branding, show flow preview
+                                        brandingSection.style.display = 'none';
+                                        flowSection.style.display = 'flex';
+
+                                        setTimeout(() => {
+                                            // Hide flow preview, show detailed steps
+                                            flowSection.style.display = 'none';
+                                            stepsSection.style.display = 'flex';
+                                        }, 2500);
+                                    }, 2800);
+                                }, 1500);
+                            }, 800);
+                        });
+                    }, 800);
+                });
+            }, 500);
+        }
+
+        // Flow Execution Animation
+        let flowExecutionStarted = false;
+
+        const flowSteps = [
+            {
+                icon: '🔍',
+                text: 'Checking for duplicates...',
+                userAvatar: '👥',
+                userAction: 'Checking in database...',
+                visual: '<div class="searching-animation"><div class="search-radar"></div><div class="search-icon">🔍</div></div>'
+            },
+            {
+                icon: '🤳',
+                text: 'Capture your selfie',
+                userAvatar: '📸',
+                userAction: 'Taking selfie',
+                visual: '<div class="camera-flash"></div>'
+            },
+            {
+                icon: '📄',
+                text: 'Scanning document...',
+                userAvatar: '🪪',
+                userAction: 'Holding ID card',
+                visual: '<div class="id-card" style="position: relative;">🪪<div class="scanning-lines"></div></div>'
+            },
+            {
+                icon: '💾',
+                text: 'Verifying with database...',
+                userAvatar: '⏳',
+                userAction: 'Waiting for verification',
+                visual: '<div class="checkmark-animation">💾</div>'
+            },
+            {
+                icon: '🎂',
+                text: 'Checking age eligibility...',
+                userAvatar: '📅',
+                userAction: 'Age being verified',
+                visual: '<div class="checkmark-animation">✓</div>'
+            },
+            {
+                icon: '👤',
+                text: 'Matching face...',
+                userAvatar: '🔄',
+                userAction: 'Face comparison',
+                visual: '<div class="checkmark-animation">👤</div>'
+            },
+            {
+                icon: '✅',
+                text: 'Enrollment complete!',
+                userAvatar: '🎉',
+                userAction: 'Successfully enrolled!',
+                visual: '<div class="checkmark-animation">✅</div>'
+            }
+        ];
+
+        function startFlowExecution() {
+            if (flowExecutionStarted) return;
+            flowExecutionStarted = true;
+
+            const screenContent = document.getElementById('screen-content');
+            const userAvatar = document.querySelector('.user-avatar');
+            const userAction = document.getElementById('user-action');
+            const actionVisual = document.getElementById('action-visual');
+            const progressItems = document.querySelectorAll('.progress-item');
+            const progressLines = document.querySelectorAll('.progress-line');
+            const replayBtn = document.getElementById('replay-btn');
+
+            // Hide replay button during animation
+            replayBtn.style.display = 'none';
+
+            // Reset everything to initial state
+            progressItems.forEach(item => {
+                item.classList.remove('active', 'completed');
+            });
+            progressLines.forEach(line => {
+                line.classList.remove('completed');
+            });
+
+            // Reset screen content to initial state
+            screenContent.innerHTML = `
+                <div class="screen-icon">📱</div>
+                <div class="screen-text">Starting KYC...</div>
+            `;
+
+            // Reset user avatar and action
+            userAvatar.textContent = '👤';
+            userAction.textContent = 'Getting ready...';
+            actionVisual.innerHTML = '';
+
+            let currentStep = 0;
+
+            function processStep() {
+                if (currentStep >= flowSteps.length) {
+                    setTimeout(() => {
+                        screenContent.innerHTML = `
+                            <div class="screen-icon">🎉</div>
+                            <div class="screen-text">KYC Complete!</div>
+                        `;
+                        userAvatar.textContent = '✅';
+                        userAction.textContent = 'Ready to ride!';
+                        actionVisual.innerHTML = '<div class="checkmark-animation" style="font-size: 6em;">🏍️</div>';
+
+                        // Mark all steps as completed
+                        progressItems.forEach(item => item.classList.add('completed'));
+                        progressLines.forEach(line => line.classList.add('completed'));
+
+                        // Show replay button
+                        setTimeout(() => {
+                            replayBtn.style.display = 'block';
+                        }, 1000);
+                    }, 500);
+                    return;
+                }
+
+                const step = flowSteps[currentStep];
+
+                // Update progress
+                if (currentStep > 0) {
+                    progressItems[currentStep - 1].classList.remove('active');
+                    progressItems[currentStep - 1].classList.add('completed');
+                    if (progressLines[currentStep - 1]) {
+                        progressLines[currentStep - 1].classList.add('completed');
+                    }
+                }
+                progressItems[currentStep].classList.add('active');
+
+                // Update phone screen
+                screenContent.innerHTML = `
+                    <div class="screen-icon">${step.icon}</div>
+                    <div class="screen-text">${step.text}</div>
+                `;
+
+                // Update user animation
+                userAvatar.textContent = step.userAvatar;
+                userAction.textContent = step.userAction;
+                actionVisual.innerHTML = step.visual;
+
+                currentStep++;
+                setTimeout(processStep, 3500);
+            }
+
+            setTimeout(processStep, 500);
+        }
+
+        function replayFlowAnimation() {
+            flowExecutionStarted = false;
+            startFlowExecution();
+        }
+
+        // Start animations when slides become active
+        const originalShowSlide = showSlide;
+        showSlide = function(n) {
+            originalShowSlide.call(this, n);
+
+            if (currentSlide === 1) { // Slide 2 (0-indexed) - Current Process
+                currentProcessStarted = false;
+                setTimeout(() => startCurrentProcessAnimation(), 300);
+            }
+
+            if (currentSlide === 2) { // Slide 3 (0-indexed) - Proposed Process
+                proposedProcessStarted = false;
+                setTimeout(() => startProposedProcessAnimation(), 300);
+            }
+
+            if (currentSlide === 5) { // Slide 6 (0-indexed) - Zepto Demo with Branding
+                demoAnimationStarted = false;
+                setTimeout(() => startZeptoDemo(), 300);
+            }
+
+            if (currentSlide === 6) { // Slide 7 (0-indexed) - Flow Execution
+                flowExecutionStarted = false;
+                setTimeout(() => startFlowExecution(), 300);
+            }
+        };
+
+        // Trigger animations on initial load
+        if (currentSlide === 1) {
+            setTimeout(() => startCurrentProcessAnimation(), 300);
+        }
+
+        if (currentSlide === 2) {
+            setTimeout(() => startProposedProcessAnimation(), 300);
+        }
+
+        if (currentSlide === 5) {
+            setTimeout(() => startZeptoDemo(), 300);
+        }
+
+        if (currentSlide === 6) {
+            setTimeout(() => startFlowExecution(), 300);
+        }
+    </script>
 </body>
 </html>
